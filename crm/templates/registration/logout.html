@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+{% extends "crm/base.html" %}
+
+{% block title %}Logged Out{% endblock title %}
+
+{% block content %}
+    <p>Logged out!</p>
+    <a href="{% url 'login'%}">Click here to login again.</a>
+{% endblock content %}
