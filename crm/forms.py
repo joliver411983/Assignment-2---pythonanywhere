@@ -1,10 +1,36 @@
 from django import forms
 from .models import Customer, Service, Product
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 
-class LoginForm(forms.Form):
-    username = forms.CharField()
-    password = forms.CharField(widget=forms.PasswordInput)
+class LoginForm(UserCreationForm):
+    #    username = forms.CharField()
+    #    password = forms.CharField(widget=forms.PasswordInput)
+    username = forms.CharField(label="Username", required=True, help_text="Required.")
+    email = forms.EmailField(label="Email address", required=True, help_text="Required.")
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
+    def save(self, commit=True):
+        user = super(UserCreationForm, self).save(commit=False)
+        user.username = self.cleaned_data["username"]
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user
+
+    def clean_email(self):
+        if User.objects.filter(username="username").exists():
+            raise forms.ValidationError("Username is not unique.")
+        return self.cleaned_data["email"]
+
+    #    def clean_username(self):
+    #        if User.objects.filter(email="email").exists():
+    #            raise forms.ValidationError("Email is not unique.")
+    #        return self.cleaned_data["username"]
 
 
 class CustomerForm(forms.ModelForm):

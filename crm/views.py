@@ -1,4 +1,3 @@
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -18,15 +17,17 @@ def index(request):
 
 def sign_up(request):
     context = {}
-    form = UserCreationForm(request.POST or None)
+    form = LoginForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return render(request, 'registration/register.html')
+            return render(request, 'crm/home.html')
+        else:
+            return render(request, 'registration/register.html', {'form': form})
     else:
         context['form'] = form
-        return render(request, 'registration/register.html', {'form': form})
+        return render(request, 'registration/register.html', context)
 
 
 def home(request):

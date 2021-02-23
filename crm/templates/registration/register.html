@@ -4,7 +4,8 @@
 {% block title %}User Registration{% endblock title %}
 
 {% block content %}
-<form method="post">
+<h2> User Registration:</h2>
+<form method="post" class="form-LoginForm">
     {% csrf_token %}
     {{form.as_p}}
     <input type="submit" value="Sign up">
